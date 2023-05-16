@@ -34,29 +34,33 @@
                 <input class="Form-Item-Input" type="text" name="type">
             </div>
             <div class="Form-Item">
-                <p class="Form-Item-Label"> 画像</p>
+                <p class="Form-Item-Label">画像</p>
                 <input type="file" name="photo" accept="image/*">
-                <!-- <p><img src="" width="200px"></p> -->
+                <div class="cms-thumb">
+                    <img src="" width="200px">
+                </div>
             </div>
-                <input class="Form-Btn" type="submit" value="OK">
+            <input class="Form-Btn" type="submit" value="OK">
         </form>
     </div>
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script>
+  $(document).ready(function() {
     $('input[type=file]').change(function(){
-        var file =$(this).prp('files')[0];
-        if(!file.type.matdh('image.*')){
-            $(this).val('');
-            $('.cms-thumb > img').html('');
-            return;
-        }
-        var reader =new FileReader();
-        reader.onload =function(){
-            $('.cms-thumb > img').attr('src',reader.result);
-        }
-        reader.readAsDataURL(file);
+      var file = $(this).prop('files')[0];
+      if (!file.type.match('image.*')) {
+        $(this).val('');
+        $('.cms-thumb > img').attr('src', '');
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function() {
+        $('.cms-thumb > img').attr('src', reader.result);
+      }
+      reader.readAsDataURL(file);
     });
-</script> -->
+  });
+</script>
 </body>
 </html>

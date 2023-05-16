@@ -43,7 +43,7 @@ if($status==false){
     exit("QueryError:".$error[2]);
 }else{
     //5.index.phpへリダイレクト
-    header("Location: top.php");
+    header("Location: top.php?id=1");
     exit;
 }
 

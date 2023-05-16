@@ -9,7 +9,9 @@ if (
     exit('ParamError');
 }
 
-//1.POSTで取得
+// var_dump($_POST);
+// 1.POSTで取得
+$id=$_POST["id"];
 $date=$_POST["date"];
 // $value=$_POST["value"];
 // $checkbox=$_POST["checkbox"];
@@ -20,34 +22,40 @@ $item_id=$_POST["item_id"];
 
 
 
-//2.DB接続
+// //2.DB接続
 try{
     $pdo=new PDO('mysql:dbname=cat_db;charaset=utf8;host=localhost','root','');//host名,ID,パスワード
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }catch(PDOException $e){
     exit('DbConnectError:'.$e->getMessage());
 }
 
-//3.UPDATEで更新
-$sql = "UPDATE log_table SET item_id=:item_id, value=:value ,memo=:memo,date=:date WHERE id=:id";
+// //3.UPDATEで更新
+// $sql = "UPDATE log_table SET item_id=:item_id, value=:value ,memo=:memo, date=:date WHERE id=:id";
+$sql = "UPDATE log_table SET item_id=:item_id, value=:value, checkbox=:checkbox, memo=:memo, date=:date WHERE id=:id";
 
 $stmt=$pdo->prepare($sql);
 
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
 $stmt->bindValue(':item_id',$item_id,PDO::PARAM_INT);
 $stmt->bindValue(':value',$value,PDO::PARAM_STR);
 $stmt->bindValue(':checkbox',$checkbox,PDO::PARAM_INT);
 $stmt->bindValue(':memo',$memo,PDO::PARAM_STR);
 $stmt->bindValue(':date',$date,PDO::PARAM_STR);
 
+// var_dump($_POST);
 $status=$stmt->execute();
+// var_dump($status);
+// print_r($status-> errorInfo());
 
-//4.データ等力処理後 *書き換えることほぼない。そのまま使っていいよ。
+// 4.データ等力処理後 *書き換えることほぼない。そのまま使っていいよ。
 if($status==false){
     //SQL実行時にエラーがある場合
-    $erro = $stmt->errorINfo();
+    $erro = $stmt->errorInfo();
     exit("QueryError:".$error[2]);
 }else{
     //5.index.phpへリダイレクト
-    header("Location: log_view.php");
+    header("Location: log_view.php?id=".$item_id);
     exit;
 }
 ?>

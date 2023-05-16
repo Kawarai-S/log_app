@@ -1,17 +1,19 @@
 .wrap {
-    margin: 0,auto;
+    margin: 0 auto;
+    max-width: 720px;
 }
 
 .main {
     padding: 40px 0 40px 0;
-    margin-left: auto;
-    margin-right: auto;
+    /* margin-left: auto;
+    margin-right: auto; */
     max-width: 720px;
     background-color: #fbe986;
-    height: 100vh;
+    height: 90vh;
     line-height: 150%;
     font-size: 1rem;
     color: rgb(75, 75, 75);
+    list-style: none;
 }
 
 /* デフォルトリンク */
@@ -24,7 +26,7 @@ a {
 .box {
   /* padding-top: 24px;
   padding-bottom: 24px; */
-  width: 80%;
+  width: 90%;
   /* display: flex;
   align-items: center; */
   margin-left: auto;
@@ -44,10 +46,11 @@ a {
   /* セレクト */
 .select {
   padding: 16px 24px;
-  width: 95%;
+  width: 90%;
   border-radius: 16px;
   border: solid 1px rgb(75, 75, 75);
   background-color: #b9e9f2;
+  margin-bottom: 24px;
 }
 
 .select a {
@@ -163,4 +166,57 @@ a {
   border: solid 1px rgb(75, 75, 75);
   margin-bottom: 24px;
   background-color: #fff;
+
+}
+
+/* .menu {
+    width: 100%;
+    max-width: 720px;
+    position: fixed;
+    bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+} */
+
+.menu {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 720px;
+  background-color: #fff;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.menu ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 60px;
+}
+
+.menu li {
+  width: 25%;
+  text-align: center;
+}
+
+.menu a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.menu i {
+  font-size: 24px;
+}
+
+.menu span {
+  display: block;
+  font-size: 10px;
+  margin-top: 4px;
 }

@@ -41,11 +41,11 @@ $status=$stmt->execute();
 //4.データ等力処理後 *書き換えることほぼない。そのまま使っていいよ。
 if($status==false){
     //SQL実行時にエラーがある場合
-    $erro = $stmt->errorINfo();
+    $erro = $stmt->errorInfo();
     exit("QueryError:".$error[2]);
 }else{
     //5.index.phpへリダイレクト
-    header("Location: top.php");
+    header("Location: top.php?id=1");
     exit;
 }
 

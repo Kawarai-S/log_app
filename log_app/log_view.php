@@ -46,7 +46,7 @@ if($status==false){
         $view .= '<a href="log_update_view.php?id='.$result["log_id"].'">';
         $view .= '<div>'.$result["f_date"].'</div>';
         if(!is_null($result["checkbox"])){
-            $view .= '<div>'.$result["checkbox"].'</div>';
+            $view .= '<div><img src="icon/check.png" style="width:24px; height:24px;"></div>';
         }elseif(!is_null($result["value"])){
             $view .= '<div>'.$result["value"].$result["unit"].'</div>';
         }
@@ -71,8 +71,13 @@ if($status==false){
 <body>
     <div class="wrap">
         <div class="main">
-            <div>
-                <img src="">
+            <div class="box icon">
+                <div class="add_icon">
+                    <!-- 今度id入れられるようにする -->
+                    <a href="top.php?id=1">
+                        <img src="icon/back.png" style="width:32px; height:32px">
+                    </a>
+                </div>    
             </div>
             <?=$view?>
         </div>

@@ -70,6 +70,7 @@ if ($row['type'] === 'number') {
                 <input  class="Form-Item-Input" type="textarea" name="memo" value="<?=$row["memo"]?>">
             </div>
             <input type="hidden" name="item_id" value="<?=$row["item_id"]?>">
+            <input type="hidden" name="id" value="<?=$id?>">
             <input class="Form-Btn" type="submit" value="OK">
         </form>
     </div>

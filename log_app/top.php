@@ -69,7 +69,7 @@ if ($status == false) {
         } elseif (!is_null($result["checkbox"])) {
             $view .= '<div class="log_box">';
             $view .= '<a href="log_view.php?id='.$result["id"].'">';
-            $view .= '<div>'.$result["item"].'</div><div>'.$result["checkbox"].'</div><div>'.$result["f_date"].'</div>';
+            $view .= '<div>'.$result["item"].'</div><div><img src="icon/check.png" style="width:24px; height:24px;"></div><div>'.$result["f_date"].'</div>';
             $view .= '</a>';
             $view .= '</div>';
         }
@@ -115,12 +115,22 @@ $ageInDays = $diff->days;
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="wrap">
         <div class="main">
+        <div class="box icon">
+                <div class="add_icon">
+                    <!-- 今度id入れられるようにする -->
+                    <a href="register.php">
+                        <img src="icon/plus.png"  style="width: 24px; height: 24px">
+                    </a>
+                </div>    
+            </div>
             <div class="box">   
                 <div class="target_box">
                     <!-- アイコン画像 -->
@@ -151,6 +161,14 @@ $ageInDays = $diff->days;
             </div>
                 <?=$view?>
             </div>
+        </div>
+        <div class="menu">
+            <ul>
+                <li><a href="select.php"><i class="fa-solid fa-paw"></i><span>Pets</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-chart-line"></i><span>Chart</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-stethoscope"></i><span>Hospital</span></a></li>
+                <li><a href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
+            </ul>
         </div>
     </div>
 </body>
