@@ -16,11 +16,19 @@ try{
 // $stmt->bindValue(':item_id',$item_id,PDO::PARAM_INT);
 // $status = $stmt->execute();
 
-$sql = "SELECT * FROM log_table
-        LEFT JOIN item_table
-        ON log_table.item_id = item_table.id
-        WHERE item_table.id = :item_id
-        ORDER BY log_table.date DESC";
+// $sql = "SELECT * FROM log_table
+//         LEFT JOIN item_table
+//         ON log_table.item_id = item_table.id
+//         WHERE item_table.id = :item_id
+//         ORDER BY log_table.date DESC";
+
+
+$sql = "SELECT log_table.id as log_id, item_table.id as item_id, 
+        DATE_FORMAT(log_table.date, '%Y-%m-%d %H:%i') as f_date, value, checkbox, memo, unit 
+        FROM log_table 
+        LEFT JOIN item_table 
+        ON log_table.item_id = item_table.id 
+        WHERE item_table.id=:item_id ORDER BY log_table.date DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':item_id',$item_id,PDO::PARAM_INT);
 $status = $stmt->execute();
@@ -35,8 +43,8 @@ if($status==false){
     while($result=$stmt->fetch(PDO::FETCH_ASSOC)){
         $view .= '<div class="box">';
         $view .= '<div class="log">';
-        $view .= '<a href="log_update.php?id='.$result["id"].'">';
-        $view .= '<div>'.$result["date"].'</div>';
+        $view .= '<a href="log_update_view.php?id='.$result["log_id"].'">';
+        $view .= '<div>'.$result["f_date"].'</div>';
         if(!is_null($result["checkbox"])){
             $view .= '<div>'.$result["checkbox"].'</div>';
         }elseif(!is_null($result["value"])){
@@ -47,6 +55,7 @@ if($status==false){
         $view .= '</div>';
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -62,6 +71,9 @@ if($status==false){
 <body>
     <div class="wrap">
         <div class="main">
+            <div>
+                <img src="">
+            </div>
             <?=$view?>
         </div>
     </div>

@@ -75,7 +75,11 @@ if ($status == false) {
         }
         // 項目記録ページへリンク
         $view .= '<div class="add_box">';
-        $view .= '<a href="log_add.php?id='.$result["id"].'"><div>+</div></a>';
+        $view .= '<a href="log_add.php?id='.$result["id"].'">';
+        $view .= '<div>';
+        $view .= '<img src="icon/pen.png" style="width: 32px; height: 32px">';
+        $view .= '</div>';
+        $view .= '</a>';
         $view .= '</div>';
         $view .= '</div>';
         $view .= '</div>';
@@ -137,9 +141,13 @@ $ageInDays = $diff->days;
                     </div>
                 </div>
             </div>
-            <div class="box">
-                <p>記録</p>
-                <img src="" alt="項目追加">
+            <div class="box icon">
+                <div style="font-size:1.1rem; font-weight:bold;">記録</div>
+                <div class="add_icon">
+                    <a href="item_add.php">
+                        <img style="width: 24px; height: 24px" src="icon/plus.png" alt="項目追加">
+                    </a>                
+                </div>              
             </div>
                 <?=$view?>
             </div>

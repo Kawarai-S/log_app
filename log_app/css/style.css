@@ -22,16 +22,26 @@ a {
 
 /* 汎用ボックス */
 .box {
-    /* padding-top: 24px;
-    padding-bottom: 24px; */
-    width: 80%;
-    /* display: flex;
-    align-items: center; */
-    margin-left: auto;
-    margin-right: auto;
-  }
+  /* padding-top: 24px;
+  padding-bottom: 24px; */
+  width: 80%;
+  /* display: flex;
+  align-items: center; */
+  margin-left: auto;
+  margin-right: auto;
+}
 
-/* セレクト */
+.icon {
+  display: flex;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.add_icon{
+  margin-left: auto;
+}
+
+  /* セレクト */
 .select {
   padding: 16px 24px;
   width: 95%;
@@ -100,7 +110,6 @@ a {
   height: 100%;
   object-fit: cover;
 }
-
 
 /* トップページ項目一覧 */
 .items_box {
