@@ -29,7 +29,8 @@ if($status==false){
 }
 
 // データ取得SQL(item&log)
-$sql = "SELECT item_table.*, latest_log.value, latest_log.checkbox, latest_log.date 
+$sql = "SELECT item_table.*, latest_log.value, latest_log.checkbox, latest_log.date, 
+                DATE_FORMAT(latest_log.date, '%Y-%m-%d %H:%i') AS f_date 
         FROM item_table 
         LEFT OUTER JOIN (
             SELECT item_id, value, checkbox, date 
@@ -53,21 +54,31 @@ if ($status == false) {
 } else {
     while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
         // 項目名・アイコンの表示・項目履歴一覧へリンク
-        $view .= '<div class="box"><div>';
+        $view .= '<div class="box">';
+        $view .= '<div class="items_box">';
         $view .= '<a href="log_view.php?id='.$result["id"].'">';
-        $view .= '<div><img src="'.$result["icon"].'">'.$result["item"].'</div>';
+        $view .= '<div class="icon_box"><img src="'.$result["icon"].'"></div>';
         $view .= '</a>';
         // 最新の記録を表示
         if (!is_null($result["value"])) {
-            $view .= '<div>'.$result["value"].' '.$result["unit"].' ('.$result["date"].')</div>';
+            $view .= '<div class="log_box">';
+            $view .= '<a href="log_view.php?id='.$result["id"].'">';
+            $view .= '<div>'.$result["item"].'</div><div>'.$result["value"].' '.$result["unit"].'</div><div>'.$result["f_date"].'</div>';
+            $view .= '</a>';
+            $view .= '</div>';
         } elseif (!is_null($result["checkbox"])) {
-            $view .= '<div>'.$result["checkbox"].' ('.$result["date"].')</div>';
+            $view .= '<div class="log_box">';
+            $view .= '<a href="log_view.php?id='.$result["id"].'">';
+            $view .= '<div>'.$result["item"].'</div><div>'.$result["checkbox"].'</div><div>'.$result["f_date"].'</div>';
+            $view .= '</a>';
+            $view .= '</div>';
         }
         // 項目記録ページへリンク
-        $view .= '<div>';
-        $view .= '<a href="log_add.php?id='.$result["id"].'">+</a>';
+        $view .= '<div class="add_box">';
+        $view .= '<a href="log_add.php?id='.$result["id"].'"><div>+</div></a>';
         $view .= '</div>';
-        $view .= '</div></div>';
+        $view .= '</div>';
+        $view .= '</div>';
     }
 }
 
@@ -106,18 +117,24 @@ $ageInDays = $diff->days;
 <body>
     <div class="wrap">
         <div class="main">
-            <div class="box target_box">   
-
-                <!-- アイコン画像 -->
-                <div class="target_icon"><img src="img/<?=$row["photo"]?>" alt="アイコン"></div>
-                <!-- 名前・年齢・性別 -->
-                <div>
-                    <p><?=$row["name"]?></p>
-                    <p><?=$ageInYears."歳".$ageInMonths."ヶ月"?><?=$row["gender"]?></p>
-                </div>
-                <!-- 誕生日・生まれて何日 -->
-                <div>
-                    <p><?=$row["birth"]?><?=$ageInDays."日"?></p> 
+            <div class="box">   
+                <div class="target_box">
+                    <!-- アイコン画像 -->
+                    <div class="target">
+                        <div class="target_icon"><img src="img/<?=$row["photo"]?>" alt="アイコン"></div>
+                    </div>
+                    <!-- 名前・年齢・性別 -->
+                    <div class="name">
+                        <p><?=$row["name"]?></p>
+                        <p><?=$ageInYears."歳".$ageInMonths."ヶ月"?>　<?=$row["gender"]?></p>
+                    </div>
+                    <!-- 誕生日・生まれて何日 -->
+                    <div class="birth">
+                        <table class="birth_table">
+                            <tr><td>誕生日</td><td class="left"><?=$row["birth"]?></td></tr>
+                            <tr><td>生まれて</td><td class="left"><?=$ageInDays."日目"?></td></tr> 
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="box">

@@ -1,47 +1,157 @@
 .wrap {
     margin: 0,auto;
-    line-height: 150%;
 }
 
 .main {
-    margin-top: 40px;
+    padding: 40px 0 40px 0;
     margin-left: auto;
     margin-right: auto;
     max-width: 720px;
+    background-color: #fbe986;
+    height: 100vh;
+    line-height: 150%;
+    font-size: 1rem;
+    color: rgb(75, 75, 75);
 }
-@media screen and (max-width: 480px) {
-    .Form {
-      margin-top: 32px;
-    }
-  }
 
+/* デフォルトリンク */
+a {
+  text-decoration: none;
+  color: rgb(75, 75, 75);
+}
+
+/* 汎用ボックス */
 .box {
-    padding-top: 24px;
-    padding-bottom: 24px;
+    /* padding-top: 24px;
+    padding-bottom: 24px; */
     width: 80%;
-    display: flex;
-    align-items: center;
-  }
-  @media screen and (max-width: 480px) {
-    .box {
-      padding-left: 14px;
-      padding-right: 14px;
-      padding-top: 16px;
-      padding-bottom: 16px;
-      flex-wrap: wrap;
-    }
+    /* display: flex;
+    align-items: center; */
+    margin-left: auto;
+    margin-right: auto;
   }
 
+/* セレクト */
+.select {
+  padding: 16px 24px;
+  width: 95%;
+  border-radius: 16px;
+  border: solid 1px rgb(75, 75, 75);
+  background-color: #b9e9f2;
+}
+
+.select a {
+  display: flex;
+  align-items: center;
+}
+
+.select div {
+  margin-right: 32px;
+}
+
+/* ターゲットボックス */
+.target_box {
+  padding: 16px 16px;
+  width: 95%;
+  border-radius: 16px;
+  border: solid 1px rgb(75, 75, 75);
+  display: grid;
+  grid-template-columns: 30% 70% ;
+  grid-template-rows:50% 50% ;
+  margin-bottom: 24px;
+  background-color: #b9e9f2;
+  align-items: center;
+}
+
+.target {
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+}
+
+.name {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+
+.birth {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+.birth_table {
+  width: 100%;
+}
+
+.left {
+  text-align: right;
+}
+
+/* targetアイコンの指定 */
 .target_icon {
-    width: 72px;
-    height: 72px;
-    overflow: hidden;
-    border-radius: 36px;
-    margin: 15px;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: 36px;
+  border: solid 1px #fff;
 }
 
 .target_icon img {
-    width: auto;
-    height: 100%;
-    object-fit: cover;
+  width: auto;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* トップページ項目一覧 */
+.items_box {
+  padding: 16px 16px;
+  width: 95%;
+  border-radius: 16px;
+  border: solid 1px rgb(75, 75, 75);
+  display: grid;
+  grid-template-columns: 20% 70% 10%;
+  justify-items: center; 
+  align-items: center;
+  margin-bottom: 24px;
+  background-color: #fff;
+}
+
+
+.icon_box {
+  /* padding: 16px 8px 16px 16px ; */
+  grid-column: 1;
+  width: 100%;
+  /* height: 100%; */
+}
+
+.log_box {
+  /* padding: 16px 8px 16px 8px ; */
+  grid-column: 2;
+  width: 100%;
+  /* height: 100%; */
+}
+
+.add_box {
+  /* padding: 16px 16px 16px 8px ; */
+  grid-column: 3;
+  width: 100%;
+  /* height: 100%; */
+  /* background-color: #41b19e;
+  border-radius: 0 16px 16px 0; */
+}
+
+.icon_box img {
+  width: 48px;
+  height: px;
+}
+
+
+/* logページ */
+.log {
+  padding: 16px 16px;
+  width: 95%;
+  border-radius: 16px;
+  border: solid 1px rgb(75, 75, 75);
+  margin-bottom: 24px;
+  background-color: #fff;
 }

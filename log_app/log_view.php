@@ -25,6 +25,7 @@ if($status==false){
 }else{
     while($result=$stmt->fetch(PDO::FETCH_ASSOC)){
         $view .= '<div class="box">';
+        $view .= '<div class="log">';
         $view .= '<a href="log_update.php?id='.$result["id"].'">';
         $view .= '<div>'.$result["f_date"].'</div>';
         if(!is_null($result["checkbox"])){
@@ -33,6 +34,7 @@ if($status==false){
             $view .= '<div>'.$result["value"].'</div>';
         }
         $view .= '</a>';
+        $view .= '</div>';
         $view .= '</div>';
     }
 }
@@ -50,10 +52,9 @@ if($status==false){
 </head>
 <body>
     <div class="wrap">
-        <div>
+        <div class="main">
             <?=$view?>
         </div>
-
     </div>
 </body>
 </html>

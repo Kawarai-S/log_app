@@ -19,10 +19,12 @@ if($status==false){
 }else{
     while($result=$stmt->fetch(PDO::FETCH_ASSOC)){
         $view .= '<div class="box">';
+        $view .= '<div class="select">';
         $view .= '<a href="top.php?id='.$result["id"].'">';
         $view .= '<div class="target_icon"><img src="img/'.$result["photo"].'"></div>';
         $view .= '<div>'.$result["name"].'</div>';
         $view .= '</a>';
+        $view .= '</div>';
         $view .= '</div>';
     }
 }
