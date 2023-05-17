@@ -24,11 +24,7 @@ a {
 
 /* 汎用ボックス */
 .box {
-  /* padding-top: 24px;
-  padding-bottom: 24px; */
   width: 90%;
-  /* display: flex;
-  align-items: center; */
   margin-left: auto;
   margin-right: auto;
 }
