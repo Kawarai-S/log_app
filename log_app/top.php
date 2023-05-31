@@ -3,11 +3,8 @@
 $target_id = $_GET["id"];
 
 //1.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
-try{
-    $pdo=new PDO('mysql:dbname=cat_db;charaset=utf8;host=localhost','root','');//host名,ID,パスワード
-}catch(PDOException $e){
-    exit('データベースに接続出来ませんでした。'.$e->getMessage());
-}
+include("funcs.php");
+$pdo = db_conn();
 
 //2.データ取得SQL（target）
 $sql = "SELECT*FROM target_table WHERE id=:target_id";
@@ -32,7 +29,7 @@ if($status==false){
 $sql = "SELECT item_table.*, latest_log.value, latest_log.checkbox, latest_log.date, 
                 DATE_FORMAT(latest_log.date, '%Y-%m-%d %H:%i') AS f_date 
         FROM item_table 
-        LEFT OUTER JOIN (
+        LEFT JOIN (
             SELECT item_id, value, checkbox, date 
             FROM log_table AS l1
             WHERE date = (
@@ -41,12 +38,17 @@ $sql = "SELECT item_table.*, latest_log.value, latest_log.checkbox, latest_log.d
                 WHERE l1.item_id = l2.item_id
             )
         ) AS latest_log ON item_table.id = latest_log.item_id 
+        WHERE target_id=:target_id
         ORDER BY item_table.id ASC";
 
+
+
 $stmt = $pdo->prepare($sql);
+$stmt->bindValue(':target_id',$target_id,PDO::PARAM_INT);
 $status = $stmt->execute();
 
 // データ表示(item&log)
+$view="";
 if ($status == false) {
     // SQL実行時にエラーがある場合
     $error = $stmt->errorInfo();
@@ -62,20 +64,20 @@ if ($status == false) {
         // 最新の記録を表示
         if (!is_null($result["value"])) {
             $view .= '<div class="log_box">';
-            $view .= '<a href="log_view.php?id='.$result["id"].'">';
+            $view .= '<a href="log_view.php?id='.$result["id"].'&target_id='.$target_id.'">';
             $view .= '<div>'.$result["item"].'</div><div>'.$result["value"].' '.$result["unit"].'</div><div>'.$result["f_date"].'</div>';
             $view .= '</a>';
             $view .= '</div>';
         } elseif (!is_null($result["checkbox"])) {
             $view .= '<div class="log_box">';
-            $view .= '<a href="log_view.php?id='.$result["id"].'">';
+            $view .= '<a href="log_view.php?id='.$result["id"].'&target_id='.$target_id.'">';
             $view .= '<div>'.$result["item"].'</div><div><img src="icon/check.png" style="width:24px; height:24px;"></div><div>'.$result["f_date"].'</div>';
             $view .= '</a>';
             $view .= '</div>';
         }
         // 項目記録ページへリンク
         $view .= '<div class="add_box">';
-        $view .= '<a href="log_add.php?id='.$result["id"].'">';
+        $view .= '<a href="log_add.php?id='.$result["id"].'&target_id='.$target_id.'">';
         $view .= '<div>';
         $view .= '<img src="icon/pen.png" style="width: 32px; height: 32px">';
         $view .= '</div>';
@@ -87,15 +89,11 @@ if ($status == false) {
 }
 
 
-
-
 //4.月齢の計算
 $now = new DateTime(); // 現在日時を取得
 $birth = new DateTime($row["birth"]); // データベースから取得した誕生日をDateTimeオブジェクトに変換
 $diff = $now->diff($birth); // 現在日時と誕生日の差分を計算
 $ageInMonths = $diff->y * 12 + $diff->m;
-
-
 
 //5.年月の計算
 $ageInYears = floor($ageInMonths / 12); // 年を計算
@@ -125,9 +123,9 @@ $ageInDays = $diff->days;
         <div class="main">
         <div class="box icon">
                 <div class="add_icon">
-                    <!-- 今度id入れられるようにする -->
                     <a href="register.php">
-                        <img src="icon/plus.png"  style="width: 24px; height: 24px">
+                        <i class="fa-regular fa-square-plus size"></i>
+                        <!-- <img src="icon/plus.png"  style="width: 24px; height: 24px"> -->
                     </a>
                 </div>    
             </div>
@@ -154,8 +152,9 @@ $ageInDays = $diff->days;
             <div class="box icon">
                 <div style="font-size:1.1rem; font-weight:bold;">記録</div>
                 <div class="add_icon">
-                    <a href="item_add.php">
-                        <img style="width: 24px; height: 24px" src="icon/plus.png" alt="項目追加">
+                    <a href="item_add.php?id=<?=$target_id?>">
+                        <i class="fa-regular fa-square-plus size"></i>
+                        <!-- <img style="width: 24px; height: 24px" src="icon/plus.png" alt="項目追加"> -->
                     </a>                
                 </div>              
             </div>
@@ -165,7 +164,7 @@ $ageInDays = $diff->days;
         <div class="menu">
             <ul>
                 <li><a href="select.php"><i class="fa-solid fa-paw"></i><span>Pets</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-chart-line"></i><span>Chart</span></a></li>
+                <li><a href="chart_view.php"><i class="fa-solid fa-chart-line"></i><span>Chart</span></a></li>
                 <li><a href="#"><i class="fa-solid fa-stethoscope"></i><span>Hospital</span></a></li>
                 <li><a href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
             </ul>

@@ -3,6 +3,7 @@
 if (
     !isset($_POST["date"]) || $_POST["date"] == "" ||
     !isset($_POST["item_id"]) || $_POST["item_id"] == "" ||
+    !isset($_POST["target_id"]) || $_POST["target_id"] == "" ||
     (!isset($_POST["value"]) && !isset($_POST["checkbox"])) ||
     (isset($_POST["value"]) && isset($_POST["checkbox"]))
 ) {
@@ -15,14 +16,13 @@ $value=$_POST["value"];
 $checkbox=$_POST["checkbox"];
 $memo=$_POST["memo"];
 $item_id=$_POST["item_id"];
+$target_id=$_POST["target_id"];
 
+// var_dump($target_id);
 
 //2.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
-try{
-    $pdo=new PDO('mysql:dbname=cat_db;charaset=utf8;host=localhost','root','');//host名,ID,パスワード
-}catch(PDOException $e){
-    exit('DbConnectError:'.$e->getMessage());
-}
+include("funcs.php");
+$pdo = db_conn();
 
 //3.データ登録SQL作成  
 $sql = "INSERT INTO log_table(id, item_id, value, checkbox, memo, date )
@@ -39,13 +39,12 @@ $stmt->bindValue(':date',$date,PDO::PARAM_STR);
 $status=$stmt->execute();
 
 //4.データ等力処理後 *書き換えることほぼない。そのまま使っていいよ。
+
 if($status==false){
-    //SQL実行時にエラーがある場合
-    $erro = $stmt->errorInfo();
-    exit("QueryError:".$error[2]);
+    sql_error($stmt);
 }else{
     //5.index.phpへリダイレクト
-    header("Location: top.php?id=1");
+    header("Location: top.php?id=" . $target_id);
     exit;
 }
 

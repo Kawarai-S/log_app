@@ -1,10 +1,11 @@
 <?php
+//target_idを取得
+$target_id=$_GET["id"];
+
+
 //データベース接続
-try{
-    $pdo=new PDO('mysql:dbname=cat_db;charaset=utf8;host=localhost','root','');//host名,ID,パスワード
-}catch(PDOException $e){
-    exit('DbConnectError:'.$e->getMessage());
-}
+include("funcs.php");
+$pdo = db_conn();
 
 //データ取得
 $stmt=$pdo->prepare("SELECT*FROM icon_table");
@@ -58,6 +59,7 @@ $dbh = null;
                 <p class="Form-Item-Label"> 単位</p>
                 <input class="Form-Item-Input" type="text" name="unit">
             </div>
+                <input type="hidden" name="target_id" value="<?=$target_id?>">
                 <input class="Form-Btn" type="submit" value="OK">
         </form>
     </div>

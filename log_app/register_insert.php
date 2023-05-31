@@ -27,11 +27,8 @@ if(move_uploaded_file($_FILES['photo']['tmp_name'],$upload.$photo)){
 }
 
 //2.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
-try{
-    $pdo=new PDO('mysql:dbname=cat_db;charaset=utf8;host=localhost','root','');//host名,ID,パスワード
-}catch(PDOException $e){
-    exit('DbConnectError:'.$e->getMessage());
-}
+include("funcs.php");
+$pdo = db_conn();
 
 //3.データ登録SQL作成
 $sql = "INSERT INTO target_table(id, name, gender, birth, type, photo, indate )

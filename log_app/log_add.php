@@ -1,13 +1,11 @@
 <?php
 //0.GETでid値を取得
 $item_id = $_GET["id"];
+$target_id=$_GET["target_id"];
 
 //1.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
-try{
-    $pdo=new PDO('mysql:dbname=cat_db;charaset=utf8;host=localhost','root','');//host名,ID,パスワード
-}catch(PDOException $e){
-    exit('データベースに接続出来ませんでした。'.$e->getMessage());
-}
+include("funcs.php");
+$pdo = db_conn();
 
 //2.データ取得SQL
 $sql = "SELECT*FROM item_table WHERE id=:item_id";
@@ -67,6 +65,7 @@ if ($row['type'] === 'number') {
                 <input  class="Form-Item-Input" type="textarea" name="memo">
             </div>
             <input type="hidden" name="item_id" value="<?=$item_id?>">
+            <input type="hidden" name="target_id" value="<?=$target_id?>">
             <input class="Form-Btn" type="submit" value="OK">
         </form>
     </div>

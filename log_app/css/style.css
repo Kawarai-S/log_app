@@ -9,7 +9,7 @@
     margin-right: auto; */
     max-width: 720px;
     background-color: #fbe986;
-    height: 90vh;
+    height: 100vh;
     line-height: 150%;
     font-size: 1rem;
     color: rgb(75, 75, 75);
@@ -37,6 +37,10 @@ a {
 
 .add_icon{
   margin-left: auto;
+}
+
+.size {
+  font-size: 1.5em;
 }
 
   /* セレクト */
@@ -162,7 +166,13 @@ a {
   border: solid 1px rgb(75, 75, 75);
   margin-bottom: 24px;
   background-color: #fff;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
 
+.trash {
+  justify-self: end;
 }
 
 /* .menu {

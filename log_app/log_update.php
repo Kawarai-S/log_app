@@ -23,12 +23,8 @@ $item_id=$_POST["item_id"];
 
 
 // //2.DB接続
-try{
-    $pdo=new PDO('mysql:dbname=cat_db;charaset=utf8;host=localhost','root','');//host名,ID,パスワード
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-}catch(PDOException $e){
-    exit('DbConnectError:'.$e->getMessage());
-}
+include("funcs.php");
+$pdo = db_conn();
 
 // //3.UPDATEで更新
 // $sql = "UPDATE log_table SET item_id=:item_id, value=:value ,memo=:memo, date=:date WHERE id=:id";
@@ -51,8 +47,7 @@ $status=$stmt->execute();
 // 4.データ等力処理後 *書き換えることほぼない。そのまま使っていいよ。
 if($status==false){
     //SQL実行時にエラーがある場合
-    $erro = $stmt->errorInfo();
-    exit("QueryError:".$error[2]);
+    sql_error($stmt);
 }else{
     //5.index.phpへリダイレクト
     header("Location: log_view.php?id=".$item_id);

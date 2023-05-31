@@ -1,10 +1,13 @@
 <?php
-//1.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
-try{
-    $pdo=new PDO('mysql:dbname=cat_db;charaset=utf8;host=localhost','root','');//host名,ID,パスワード
-}catch(PDOException $e){
-    exit('DbConnectError:'.$e->getMessage());
+session_start();
+if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
+    echo "LOGIN Error!";
+    exit();
 }
+
+// 1.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
+include("funcs.php");
+$pdo = db_conn();
 
 //2.データ取得SQL
 $stmt=$pdo->prepare("SELECT * FROM target_table");
@@ -26,8 +29,48 @@ if($status==false){
         $view .= '</a>';
         $view .= '</div>';
         $view .= '</div>';
+
+        // $view .='<div class="box">';   
+        // $view .='<div class="target_box">';
+        // $view .= '<a href="top.php?id='.$result["id"].'">';
+        // // アイコン画像
+        // $view .='<div class="target">';
+        // $view .='<div class="target_icon"><img src=".img/'.$result["photo"].'" alt="アイコン"></div>';
+        // $view .='</div>';
+        // // 名前・年齢・性別
+        // $view .= '<div class="name">';
+        // $view .= '<p>'.$result["name"].'</p>';
+        // $view .= '<p>'.$ageInYears.'歳'.$ageInMonths.'ヶ月　'.$result["gender"].'</p>';
+        // $view .= '</div>';
+        // // 誕生日・生まれて何日 -->
+        // $view .=  '<div class="birth">';
+        // $view .=  '<table class="birth_table">';
+        // $view .=  '<tr><td>誕生日</td><td class="left">'.$result["birth"].'</td></tr>';
+        // $view .=  '<tr><td>生まれて</td><td class="left">'.$ageInDays.'日目'.'</td></tr>'; 
+        // $view .=  '</table>';
+        // $view .=  '</div>';
+        // $view .=  '</a>';
+        // $view .=  '</div></div>';
+
     }
 }
+
+// //4.月齢の計算
+// $now = new DateTime(); // 現在日時を取得
+// $birth = new DateTime($row["birth"]); // データベースから取得した誕生日をDateTimeオブジェクトに変換
+// $diff = $now->diff($birth); // 現在日時と誕生日の差分を計算
+// $ageInMonths = $diff->y * 12 + $diff->m;
+
+
+
+// //5.年月の計算
+// $ageInYears = floor($ageInMonths / 12); // 年を計算
+// $ageInMonths -= $ageInYears * 12; // 月を計算
+
+// //6.生まれてから何日？
+// $ageInDays = $diff->days;
+
+
 
 ?>
 
@@ -52,7 +95,7 @@ if($status==false){
         <div class="menu">
             <ul>
                 <li><a href="select.php"><i class="fa-solid fa-paw"></i><span>Pets</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-chart-line"></i><span>Chart</span></a></li>
+                <li><a href="chart.php"><i class="fa-solid fa-chart-line"></i><span>Chart</span></a></li>
                 <li><a href="#"><i class="fa-solid fa-stethoscope"></i><span>Hospital</span></a></li>
                 <li><a href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
             </ul>

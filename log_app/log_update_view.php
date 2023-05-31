@@ -3,11 +3,8 @@
 $id = $_GET["id"];
 
 //2.DB接続など
-try{
-    $pdo=new PDO('mysql:dbname=cat_db;charaset=utf8;host=localhost','root','');//host名,ID,パスワード
-}catch(PDOException $e){
-    exit('データベースに接続できませんでした。'.$e->getMessage());
-}
+include("funcs.php");
+$pdo = db_conn();
 
 //3.SELECT*FROM
 $sql = "SELECT * FROM log_table
