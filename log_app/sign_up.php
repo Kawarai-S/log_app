@@ -23,7 +23,7 @@
             <div class="Form-Item">
                 <p class="Form-Item-Label"> パスワード</p>
                 <div class="password_wrapper">
-                    <input class="password_input"  type="password" name="lpw" maxlength="64">
+                    <input class="password_input"  type="text" name="lpw" maxlength="64">
                     <button class="password_toggle" type="button"></button>
                 </div>
             </div>
@@ -36,7 +36,7 @@
     $('.password_toggle').click(function(e){
         const input = $(this).prev();
         const type =input.attr('type');
-        input.attr('type',type === 'password'?'text':'password');
+        input.attr('type',type === 'text'?'password':'text');
         $(this).toggleClass('is-visible');
     });
 </script>
