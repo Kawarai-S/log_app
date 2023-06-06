@@ -28,7 +28,7 @@ $status = $stmt->execute();
 $view="";
 if($status==false){
     //SQL実行時にエラーがある場合
-    $error = $stmt->errorINfo();
+    $error = $stmt->errorInfo();
     exit("QueryError:".$error[2]);
 }else{
     while($result=$stmt->fetch(PDO::FETCH_ASSOC)){
@@ -75,6 +75,26 @@ if($status==false){
                     </a>
                 </div>    
             </div>
+            <!-- chart -->
+            <div class="box">
+                <div>
+                    <!-- <label for="month-select">年月選択：</label> -->
+                    <select id="month-select">
+                        <?php
+                        // 過去12ヶ月分の年月を生成してセレクトボックスに追加
+                        for ($i = 0; $i < 12; $i++) {
+                            $month = date('Y-m', strtotime(date("Y-m-01") . " -$i months"));
+                            $selected = ($i === 0) ? 'selected' : ''; // 最初は現在の月を選択状態にする
+                            echo "<option value=\"$month\" $selected>$month</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <canvas id="chart" width="400" height="200"></canvas>
+                </div>
+            </div>
+            <!-- LOG -->
             <div class="log_view">
                 <?=$view?>
             </div>        
@@ -82,62 +102,73 @@ if($status==false){
     </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/alert.js"></script>
 <script>
-//ごみ箱クリックで発火
+//  chart作成
+// プルダウン変更で発火
 $(document).ready(function() {
-$(".trash").on("click",function(){
-    const logId = $(this).data("log_id");
-    Swal.fire({
-            title: 'この記録を削除しますか？',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
-        }).then((result) => {
-            //ウィンドウを閉じるとDismissReason（キャンセルボタン押した場合は"cancel")という値が返される
-            if (result.dismiss !== Swal.DismissReason.cancel) { //キャンセルボタン以外がクリックされたら
-                ajax(logId);
-            } else { // キャンセルボタンがクリックされたら
-            Swal.fire(
-                'キャンセルしました',
-                '投稿は削除されませんでした',
-                'info'
-            )
-            }});
+$("#month-select").on("change",function(){
+    destroyChart(); // グラフを破棄する
+    ajax();
 })});
 
-function ajax(logId){
+// グラフを破棄する関数
+function destroyChart() {
+    const ctx = document.getElementById('chart');
+    const chart = Chart.getChart(ctx);
+    if (chart) {
+        chart.destroy();
+    }
+}
+
+// ajaxでphpへプルダウンのvalueを送信
+function ajax(){
     $.ajax({
         type: "post", //HTTPメソッド
-        url:"log_delete.php", //データの送信先
-        data: { log_id:logId }, //送信するデータ
+        url:"chart_back.php", //データの送信先
+        data: { //送信するデータ
+            "month-select":$("#month-select").val(),
+            "item_id": <?=$item_id?>
+        }, 
         dataType:"json" //レスポンスの型、種類
     })
     .done(function(data){
-        if(data.status === "success"){
-            Swal.fire({
-                title: '削除しました',
-                icon: 'success',
-                timer: 1500,
-                showConfirmButton: false
-            }).then(()=>{
-                location.reload();//
-            });
-        }else{
-            Swal.fire({
-                title: '削除に失敗しました',
-                icon: 'error',
-                timer: 1500,
-                showConfirmButton: false
-            });
-        }
-        
+        createChart(data); //チャートを作成
     })
 };
 
+// グラフを作成する関数
+function createChart(data) {
+    const ctx = document.getElementById('chart');
+    // 年月日と時間から月日のみを抽出して新しい配列を作成
+    const labels = data.map(item => item.date.substr(5, 5));
 
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+        labels: labels,
+        datasets: [{
+            data: data.map(item => item.value),
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        },
+        plugins: {
+            legend: {
+            display: false
+            }
+        }
+    }})
+}
+
+//最初の読み込み時に当月のデータを表示
+ajax();
 </script>
-
 </body>
 </html>

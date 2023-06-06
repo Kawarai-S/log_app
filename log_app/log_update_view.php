@@ -1,4 +1,10 @@
 <?php
+session_start();
+if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
+    echo "LOGIN Error!";
+    exit();
+}
+
 //1.GETでid値を取得
 $id = $_GET["id"];
 
@@ -30,7 +36,7 @@ $view = "";
 if ($row['type'] === 'number') {
     // 数値の場合はテキストボックスを表示する
     $view .= '<div class="Form-Item">';
-    $view .= '<p class="Form-Item-Label">数値</p>';
+    $view .= '<p class="Form-Item-Label">'.$row["item"].'('.$row["unit"].')'.'</p>';
     $view .= '<input class="Form-Item-Input" type="text" name="value" value="'.$row["value"].'">';
     $view .= '</div>';
 } else if ($row['type'] === 'checkbox') {
@@ -50,26 +56,28 @@ if ($row['type'] === 'number') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>記録修正</title>
-    <link rel="stylesheet" href="css/form.css">
+    <title>LOG編集</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/forms.css">
 </head>
 <body>
-
-    <div class="Form">
-        <form method="POST" action="log_update.php" >
-            <div class="Form-Item">
-                <p class="Form-Item-Label">日時</p>
-                <input class="Form-Item-Input" type="datetime-local" name="date" value="<?=$row["date"]?>">
-            </div>
-            <?=$view?>
-            <div class="Form-Item">
-                <p class="Form-Item-Label">メモ</p>
-                <input  class="Form-Item-Input" type="textarea" name="memo" value="<?=$row["memo"]?>">
-            </div>
-            <input type="hidden" name="item_id" value="<?=$row["item_id"]?>">
-            <input type="hidden" name="id" value="<?=$id?>">
-            <input class="Form-Btn" type="submit" value="OK">
-        </form>
+    <div class="wrap">
+        <div class="Form">
+            <form method="POST" action="log_update.php" >
+                <div class="Form-Item">
+                    <p class="Form-Item-Label">日時</p>
+                    <input class="Form-Item-Input" type="datetime-local" name="date" value="<?=$row["date"]?>">
+                </div>
+                <?=$view?>
+                <div class="Form-Item">
+                    <p class="Form-Item-Label">メモ</p>
+                    <input  class="Form-Item-Input" type="textarea" name="memo" value="<?=$row["memo"]?>">
+                </div>
+                <input type="hidden" name="item_id" value="<?=$row["item_id"]?>">
+                <input type="hidden" name="id" value="<?=$id?>">
+                <input class="Form-Btn" type="submit" value="OK">
+            </form>
+        </div>
     </div>
 </body>
 </html>

@@ -1,4 +1,10 @@
 <?php
+session_start();
+if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
+    echo "LOGIN Error!";
+    exit();
+}
+
 //入力確認
 if (
     !isset($_POST["date"]) || $_POST["date"] == "" ||
@@ -19,8 +25,6 @@ $checkbox = isset($_POST['checkbox']) ? 1 : NULL;
 $value = isset($_POST['value']) ? $_POST['value'] : NULL;
 $memo=$_POST["memo"];
 $item_id=$_POST["item_id"];
-
-
 
 // //2.DB接続
 include("funcs.php");

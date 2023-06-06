@@ -1,19 +1,30 @@
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .wrap {
-    margin: 0 auto;
-    max-width: 720px;
+  padding: 24px 0 24px 0;  
+  width:100%;
+  height:100vh;
+  background-color: #fbe986;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(75, 75, 75);
+  flex-direction: column;
 }
 
 .main {
-    padding: 40px 0 40px 0;
-    /* margin-left: auto;
-    margin-right: auto; */
-    max-width: 720px;
-    background-color: #fbe986;
-    height: 100vh;
-    line-height: 150%;
-    font-size: 1rem;
-    color: rgb(75, 75, 75);
-    list-style: none;
+  width: 100%;
+  background-color: #fbe986;
+  height: 100vh;
+  line-height: 150%;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 /* デフォルトリンク */
@@ -24,9 +35,8 @@ a {
 
 /* 汎用ボックス */
 .box {
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
+  width:90%;
+  min-width: 320px;
 }
 
 .icon {
@@ -46,7 +56,6 @@ a {
   /* セレクト */
 .select {
   padding: 16px 24px;
-  width: 90%;
   border-radius: 16px;
   border: solid 1px rgb(75, 75, 75);
   background-color: #b9e9f2;
@@ -65,9 +74,8 @@ a {
 /* ターゲットボックス */
 .target_box {
   padding: 16px 16px;
-  width: 95%;
-  border-radius: 16px;
-  border: solid 1px rgb(75, 75, 75);
+  /* border-radius: 16px; */
+  /* border: solid 1px rgb(75, 75, 75); */
   display: grid;
   grid-template-columns: 30% 70% ;
   grid-template-rows:50% 50% ;
@@ -117,9 +125,8 @@ a {
 /* トップページ項目一覧 */
 .items_box {
   padding: 16px 16px;
-  width: 95%;
-  border-radius: 16px;
-  border: solid 1px rgb(75, 75, 75);
+  /* border-radius: 16px; */
+  /* border: solid 1px rgb(75, 75, 75); */
   display: grid;
   grid-template-columns: 20% 70% 10%;
   justify-items: center; 
@@ -157,13 +164,11 @@ a {
   height: px;
 }
 
-
 /* logページ */
 .log {
   padding: 16px 16px;
-  width: 95%;
-  border-radius: 16px;
-  border: solid 1px rgb(75, 75, 75);
+  /* border-radius: 16px; */
+  /* border: solid 1px rgb(75, 75, 75); */
   margin-bottom: 24px;
   background-color: #fff;
   display: grid;
@@ -175,24 +180,23 @@ a {
   justify-self: end;
 }
 
-/* .menu {
-    width: 100%;
-    max-width: 720px;
-    position: fixed;
-    bottom: 0;
-    margin-left: auto;
-    margin-right: auto;
-} */
+canvas {
+  margin-bottom: 24px;
+}
 
+.log_view {
+  height: 88%;
+  overflow:scroll;
+}
+
+/* メニュー */
 .menu {
   position: fixed;
   bottom: 0;
   width: 100%;
-  max-width: 720px;
+  max-width: 640px;
   background-color: #fff;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
-  left: 50%;
-  transform: translateX(-50%);
+  /* box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); */
 }
 
 .menu ul {
@@ -206,13 +210,13 @@ a {
 }
 
 .menu li {
-  width: 25%;
+  width: 20%;
   text-align: center;
 }
 
 .menu a {
   display: block;
-  color: #333;
+  color: rgb(75, 75, 75)3;
   text-decoration: none;
   font-size: 14px;
 }
@@ -225,4 +229,55 @@ a {
   display: block;
   font-size: 10px;
   margin-top: 4px;
+}
+
+.logout_btn {
+  border: none;
+  background-color: #fff;
+  color: rgb(75, 75, 75);
+}
+
+/* カレンダー */
+.calendar {
+  background-color: #fff;
+  min-width: 336px;
+  border-collapse: collapse;
+}
+
+.calendar th {
+  height: 30px;
+  text-align: center;
+  background-color: #b9e9f2;
+  border: 1px solid rgb(200, 200, 200);
+}
+
+.calendar td {
+  height: 48px;
+  padding-left: 8px;
+  border: 1px solid rgb(200, 200, 200);
+}
+
+.today {
+  background: #b9e9f2 !important;
+}
+.calendar th:nth-of-type(1), .calendar td:nth-of-type(1) {
+  color: red;
+}
+.calendar th:nth-of-type(7), .calendar td:nth-of-type(7) {
+  color: blue;
+}
+
+@media (min-width: 641px) {
+  .wrap {
+    margin: 0 auto;
+    max-width: 640px;
+  }
+}
+
+@media (max-width: 640px){
+  /* 幅640px以下の場合に適用するスタイル */
+  .wrap {
+    margin: 0;
+    max-width: none;
+  }
 }

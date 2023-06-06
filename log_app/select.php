@@ -5,12 +5,16 @@ if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
     exit();
 }
 
+$user_id=$_SESSION["id"];
+
 // 1.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
 include("funcs.php");
 $pdo = db_conn();
 
 //2.データ取得SQL
-$stmt=$pdo->prepare("SELECT * FROM target_table");
+$sql="SELECT * FROM target_table WHERE user_id=:user_id";
+$stmt=$pdo->prepare($sql);
+$stmt->bindValue(':user_id',$user_id,PDO::PARAM_STR);
 $status=$stmt->execute();
 
 //3.データ表示

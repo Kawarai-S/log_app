@@ -1,4 +1,5 @@
 <?php
+
 //入力チェック（受信確認処理追加）
 if(
     !isset($_POST["name"]) || $_POST["name"]=="" ||
@@ -12,6 +13,7 @@ if(
 $name=$_POST["name"];
 $lid=$_POST["lid"];
 $lpw=$_POST["lpw"];
+$lpw= password_hash($lpw, PASSWORD_DEFAULT);   //パスワードハッシュ化
 
 //2.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
 include("funcs.php");

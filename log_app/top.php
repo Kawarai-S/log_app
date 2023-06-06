@@ -1,4 +1,10 @@
 <?php
+session_start();
+if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
+    echo "LOGIN Error!";
+    exit();
+}
+
 //0.GETでid値を取得
 $target_id = $_GET["id"];
 
@@ -58,13 +64,13 @@ if ($status == false) {
         // 項目名・アイコンの表示・項目履歴一覧へリンク
         $view .= '<div class="box">';
         $view .= '<div class="items_box">';
-        $view .= '<a href="log_view.php?id='.$result["id"].'">';
+        // $view .= '<a href="log.php?id='.$result["id"].'">';
         $view .= '<div class="icon_box"><img src="'.$result["icon"].'"></div>';
-        $view .= '</a>';
+        // $view .= '</a>';
         // 最新の記録を表示
         if (!is_null($result["value"])) {
             $view .= '<div class="log_box">';
-            $view .= '<a href="log_view.php?id='.$result["id"].'&target_id='.$target_id.'">';
+            $view .= '<a href="log_chart.php?id='.$result["id"].'&target_id='.$target_id.'">';
             $view .= '<div>'.$result["item"].'</div><div>'.$result["value"].' '.$result["unit"].'</div><div>'.$result["f_date"].'</div>';
             $view .= '</a>';
             $view .= '</div>';
@@ -150,7 +156,7 @@ $ageInDays = $diff->days;
                 </div>
             </div>
             <div class="box icon">
-                <div style="font-size:1.1rem; font-weight:bold;">記録</div>
+                <div style="font-size:1.1rem; font-weight:bold;">LOG</div>
                 <div class="add_icon">
                     <a href="item_add.php?id=<?=$target_id?>">
                         <i class="fa-regular fa-square-plus size"></i>
@@ -160,14 +166,21 @@ $ageInDays = $diff->days;
             </div>
                 <?=$view?>
             </div>
-        </div>
-        <div class="menu">
-            <ul>
-                <li><a href="select.php"><i class="fa-solid fa-paw"></i><span>Pets</span></a></li>
-                <li><a href="chart_view.php"><i class="fa-solid fa-chart-line"></i><span>Chart</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-stethoscope"></i><span>Hospital</span></a></li>
-                <li><a href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
-            </ul>
+            <div class="menu">
+                <ul>
+                    <li><a href="select.php"><i class="fa-solid fa-paw"></i><span>Pets</span></a></li>
+                    <li><a href="chart_view.php"><i class="fa-solid fa-book"></i><span>Diary</span></a></li>
+                    <li><a href="#"><i class="fa-solid fa-stethoscope"></i><span>Hospital</span></a></li>
+                    <li><a href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li>
+                        <form method="post" action="logout.php">
+                            <button type="submit" name="logout" class="logout_btn">
+                                <i class="fa-solid fa-right-from-bracket"></i><span>Log out</span>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </body>

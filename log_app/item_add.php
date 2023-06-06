@@ -1,4 +1,10 @@
 <?php
+session_start();
+if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
+    echo "LOGIN Error!";
+    exit();
+}
+
 //target_idを取得
 $target_id=$_GET["id"];
 
@@ -29,39 +35,41 @@ $dbh = null;
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>記録項目追加</title>
-    <link rel="stylesheet" href="css/form.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/forms.css">
 </head>
 <body>
-
-    <div class="Form">
-        <form method="POST" action="item_insert.php" >
-            <div class="Form-Item">
-                <p class="Form-Item-Label">記録項目</p>
-                <input  class="Form-Item-Input" type="text" name="item">
-            </div>
-            <div class="Form-Item">
-                <p class="Form-Item-Label">アイコン</p>
-                    <select  class="Form-Item-Input" name="icon">
+    <div class="wrap">
+        <div class="Form">
+            <form method="POST" action="item_insert.php" >
+                <div class="Form-Item">
+                    <p class="Form-Item-Label">記録項目</p>
+                    <input  class="Form-Item-Input" type="text" name="item">
+                </div>
+                <div class="Form-Item">
+                    <p class="Form-Item-Label">アイコン</p>
+                        <select  class="Form-Item-Input" name="icon">
+                            <option value="">選択してください</option>
+                            <?=$icon?>
+                        </select>
+                </div>
+                <div class="Form-Item">
+                    <p class="Form-Item-Label">記録形式</p>
+                    <select class="Form-Item-Input" name="type">
                         <option value="">選択してください</option>
-                        <?=$icon?>
+                        <option value="number">数字</option>
+                        <option value="checkbox">チェックのみ</option>
                     </select>
-            </div>
-            <div class="Form-Item">
-                <p class="Form-Item-Label">記録形式</p>
-                <select class="Form-Item-Input" name="type">
-                    <option value="">選択してください</option>
-                    <option value="number">数字</option>
-                    <option value="checkbox">チェックのみ</option>
-                </select>
-                </p>
-            </div>
-            <div class="Form-Item">
-                <p class="Form-Item-Label"> 単位</p>
-                <input class="Form-Item-Input" type="text" name="unit">
-            </div>
-                <input type="hidden" name="target_id" value="<?=$target_id?>">
-                <input class="Form-Btn" type="submit" value="OK">
-        </form>
+                    </p>
+                </div>
+                <div class="Form-Item">
+                    <p class="Form-Item-Label"> 単位</p>
+                    <input class="Form-Item-Input" type="text" name="unit">
+                </div>
+                    <input type="hidden" name="target_id" value="<?=$target_id?>">
+                    <input class="Form-Btn" type="submit" value="OK">
+            </form>
+        </div>
     </div>
 </body>
 </html>

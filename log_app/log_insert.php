@@ -1,4 +1,9 @@
 <?php
+session_start();
+if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
+    echo "LOGIN Error!";
+    exit();
+}
 //入力確認
 if (
     !isset($_POST["date"]) || $_POST["date"] == "" ||

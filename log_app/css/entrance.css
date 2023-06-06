@@ -1,0 +1,129 @@
+/* :root {
+  --primary: #fbe986;
+  --width:100%;
+} */
+
+.centered {
+  justify-content:center;
+  align-items: center;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* LOGIN FORM */
+
+.wrap{
+  width:100%;
+  height:100vh;
+  background-color: #fbe986;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(75, 75, 75);
+  flex-direction: column;
+}
+
+h1{
+  color: #fff;
+}
+
+.login{
+  width: 300px;
+  background-color: #fff;
+}
+
+.toggle-bar {
+  width: 100%;
+  height: 50px;
+  display: flex;
+}
+
+.toggle-login,
+.toggle-register {
+  width: 50%;
+  background-color: #b9e9f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.toggle-login span,
+.toggle-register span {
+  text-transform: uppercase;
+  font-family: 'Lato', sans-serif;
+}
+
+.active {
+  background-color:#85d2ee;
+}
+
+.login-body,
+.register-body {
+  width:100%;
+  height:100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-body p,
+.register-body p {
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: color 0.2s;
+  margin-bottom: 8px;
+}
+
+.login-body p:hover,
+.register-body p:hover {
+  color: #2f2f2f;
+}
+
+.input-section {
+  width: 100%;
+  text-align: center;
+}
+
+.input-section:first-child {
+  margin-top: 20px;
+}
+
+input,
+.btn {
+  width: 150px;
+  padding: 10px 15px;
+  margin-top: 10px;
+}
+
+input.user-input {
+  border: 1px solid #ddd;
+}
+
+.btn {
+  background-color:#85d2ee;
+  color: #fff;
+  border: none;
+  margin-bottom: 30px;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background-color: #b9e9f2;
+  cursor: pointer;
+}
+
+i {
+  margin-right: 5px;
+}
+
+.user-input:focus {
+  outline: none;
+  border: 1px solid #aaa;
+}

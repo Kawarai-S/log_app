@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>ログイン</title>
-     <link rel="stylesheet" href="css/form.css">
+     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-
     <div class="Form">
-        <form method="POST" action="login_act.php" enctype="multipart/form-data">
+        <form method="POST" action="login_act.php">
             <div class="Form-Item">
                 <p class="Form-Item-Label"> ID</p>
                 <input class="Form-Item-Input" type="text" name="lid">
@@ -19,7 +18,7 @@
             <div class="Form-Item">
                 <p class="Form-Item-Label"> パスワード</p>
                 <div class="password_wrapper">
-                    <input class="password_input"  type="password" name="lpw" maxlength="64">
+                    <input class="password_input"  type="text" name="lpw">
                     <button class="password_toggle" type="button"></button>
                 </div>
             </div>
@@ -32,7 +31,7 @@
     $('.password_toggle').click(function(e){
         const input = $(this).prev();
         const type =input.attr('type');
-        input.attr('type',type === 'password'?'text':'password');
+        input.attr('type',type === 'text'?'password':'text');
         $(this).toggleClass('is-visible');
     });
 </script>

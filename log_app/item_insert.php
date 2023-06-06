@@ -1,4 +1,9 @@
 <?php
+session_start();
+if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
+    echo "LOGIN Error!";
+    exit();
+}
 //入力チェック（受信確認処理追加）
 if(
     !isset($_POST["item"]) || $_POST["item"]=="" ||

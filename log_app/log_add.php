@@ -1,4 +1,9 @@
 <?php
+session_start();
+if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
+    echo "LOGIN Error!";
+    exit();
+}
 //0.GETでid値を取得
 $item_id = $_GET["id"];
 $target_id=$_GET["target_id"];
@@ -27,7 +32,7 @@ $view = "";
 if ($row['type'] === 'number') {
     // 数値の場合はテキストボックスを表示する
     $view .= '<div class="Form-Item">';
-    $view .= '<p class="Form-Item-Label">数値</p>';
+    $view .= '<p class="Form-Item-Label">'.$row["item"].'('.$row["unit"].')'.'</p>';
     $view .= '<input class="Form-Item-Input" type="text" name="value">';
     $view .= '</div>';
 } else if ($row['type'] === 'checkbox') {
@@ -49,25 +54,27 @@ if ($row['type'] === 'number') {
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>記録</title>
-    <link rel="stylesheet" href="css/form.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/forms.css">
 </head>
 <body>
-
-    <div class="Form">
-        <form method="POST" action="log_insert.php" >
-            <div class="Form-Item">
-                <p class="Form-Item-Label">日時</p>
-                <input class="Form-Item-Input" type="datetime-local" name="date" value="<?= date('Y-m-d\TH:i') ?>">
-            </div>
-            <?=$view?>
-            <div class="Form-Item">
-                <p class="Form-Item-Label">メモ</p>
-                <input  class="Form-Item-Input" type="textarea" name="memo">
-            </div>
-            <input type="hidden" name="item_id" value="<?=$item_id?>">
-            <input type="hidden" name="target_id" value="<?=$target_id?>">
-            <input class="Form-Btn" type="submit" value="OK">
-        </form>
+    <div class="wrap">
+        <div class="Form">
+            <form method="POST" action="log_insert.php" >
+                <div class="Form-Item">
+                    <p class="Form-Item-Label">日時</p>
+                    <input class="Form-Item-Input" type="datetime-local" name="date" value="<?= date('Y-m-d\TH:i') ?>">
+                </div>
+                <?=$view?>
+                <div class="Form-Item">
+                    <p class="Form-Item-Label">メモ</p>
+                    <input  class="Form-Item-Input" type="textarea" name="memo">
+                </div>
+                <input type="hidden" name="item_id" value="<?=$item_id?>">
+                <input type="hidden" name="target_id" value="<?=$target_id?>">
+                <input class="Form-Btn" type="submit" value="OK">
+            </form>
+        </div>
     </div>
-</body>
+    </body>
 </html>
