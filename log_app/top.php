@@ -6,21 +6,18 @@ if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
 }
 
 //0.GETでid値を取得
-$target_id = $_GET["id"];
+// $target_id = $_GET["id"];
+$user_id=$_SESSION["id"];
 
-//1.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
+//1.DBに接続する（エラー処理追加）
 include("funcs.php");
 $pdo = db_conn();
 
 //2.データ取得SQL（target）
-$sql = "SELECT*FROM target_table WHERE id=:target_id";
+$sql = "SELECT*FROM target_table WHERE user_id=:user_id ORDER BY id ASC LIMIT 1";
 $stmt = $pdo->prepare($sql);
-$stmt->bindValue(':target_id',$target_id,PDO::PARAM_INT);
+$stmt->bindValue(':user_id',$user_id,PDO::PARAM_INT);
 $status = $stmt->execute();
-
-// $stmt2=$pdo->prepare("SELECT * FROM item_table");
-// $status2=$stmt2->execute();
-
 
 //3.データ表示(target)
 if($status==false){
@@ -30,9 +27,35 @@ if($status==false){
 }else{
     $row=$stmt->fetch();
 }
+$target_id=$row["id"];
+
+// ユーザーが所有する全てのペットを取得するSQL
+$sql = "SELECT * FROM target_table WHERE user_id = :user_id";
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+$status = $stmt->execute();
+
+$list="";
+if($status == false){
+    // SQL実行時にエラーがある場合
+    $erro = $stmt->errorINfo();
+    exit("QueryError:".$error[2]);
+}else{
+    // ペットのリストを表示する
+    while($pet_row = $stmt->fetch()){
+        $tabId=$pet_row["id"]; //targetのidをタブの識別子とする
+        $list .= '<li class="tab"  data-tab="' . $tabId . '">'.$pet_row["name"].'</li>';
+        
+        //
+        if(empty($activeTabId)){
+            $activeTabId = $tabId;
+        }
+    }
+}
+
 
 // データ取得SQL(item&log)
-$sql = "SELECT item_table.*, latest_log.value, latest_log.checkbox, latest_log.date, 
+$sql = "SELECT item_table.*, latest_log.value, latest_log.checkbox, latest_log.date,
                 DATE_FORMAT(latest_log.date, '%Y-%m-%d %H:%i') AS f_date 
         FROM item_table 
         LEFT JOIN (
@@ -46,8 +69,6 @@ $sql = "SELECT item_table.*, latest_log.value, latest_log.checkbox, latest_log.d
         ) AS latest_log ON item_table.id = latest_log.item_id 
         WHERE target_id=:target_id
         ORDER BY item_table.id ASC";
-
-
 
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':target_id',$target_id,PDO::PARAM_INT);
@@ -127,15 +148,25 @@ $ageInDays = $diff->days;
 <body>
     <div class="wrap">
         <div class="main">
-        <div class="box icon">
-                <div class="add_icon">
-                    <a href="register.php">
-                        <i class="fa-regular fa-square-plus size"></i>
+            <!-- <div class="box icon"> -->
+                <!-- <div class="add_icon"> -->
+                    <!-- <a href="register.php"> -->
+                        <!-- <i class="fa-regular fa-square-plus size"></i> -->
                         <!-- <img src="icon/plus.png"  style="width: 24px; height: 24px"> -->
-                    </a>
-                </div>    
-            </div>
+                    <!-- </a> -->
+                <!-- </div>     -->
+            <!-- </div> -->
             <div class="box">   
+                <div id="pet_tabs">
+                    <ul>
+                        <?=$list?>
+                        <li class="tab">
+                            <a href="register.php">
+                            <i class="fa-regular fa-square-plus size"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="target_box">
                     <!-- アイコン画像 -->
                     <div class="target">
@@ -183,5 +214,20 @@ $ageInDays = $diff->days;
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".tab").on("click",function(){
+                let tabId = $(this).data('data-tab');
+         
+                $('.tab').removeClass('active');
+
+                $(this).addClass('active');
+                
+            });
+            // 最初のタブに active クラスを追加
+            $('.tab:first').addClass('active');
+        })
+    </script>
 </body>
 </html>
