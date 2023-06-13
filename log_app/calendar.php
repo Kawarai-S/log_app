@@ -35,6 +35,40 @@ function diary_icon($date, $diary_array, $target_id) {
         return $icon;
 }
 
+//************通院記録の有無の確認と日付を取り出す関数*************/
+function getHospitalDates($target_id) {
+    $pdo = db_conn();
+
+    $ps2 = $pdo->prepare("SELECT date FROM hospital_table WHERE target_id = :target_id GROUP BY date");
+    $ps2->execute([':target_id' => $target_id]);;
+
+    $hospital_dates = array();
+
+    foreach($ps2 as $out) {
+        $date_out = strtotime((string) $out['date']);
+        $hospital_dates[date('Y-m-d', $date_out)] = true;
+    }
+
+    ksort($hospital_dates);
+    return $hospital_dates;
+}
+
+//************通院記録のある日にアイコンを表示させる関数*************/
+$hospital_array = getHospitalDates($target_id);
+function hospital_icon($date, $hospital_array, $target_id) {
+    $icon2="";    
+    if (array_key_exists($date, $hospital_array)) {       
+        $icon2 .= '</br><a href="hospital_view.php?date='.$date.'&id='.$target_id.'">';
+        $icon2 .= '<i class="fa-solid fa-stethoscope"></i>';
+        $icon2 .= '</a>';
+        }    
+        return $icon2;
+}
+
+
+
+
+
 //************カレンダーの表示*************/
 // タイムゾーンを設定
 date_default_timezone_set('Asia/Tokyo');
@@ -94,6 +128,7 @@ for ( $day = 1; $day <= $day_count; $day++, $youbi++) {
 
     //予約日設定
     $diary = diary_icon(date("Y-m-d",strtotime($date)),$diary_array,$target_id);
+    $hospital = hospital_icon(date("Y-m-d",strtotime($date)),$hospital_array,$target_id);
 
 
     if ($today == $date) {
@@ -101,6 +136,10 @@ for ( $day = 1; $day <= $day_count; $day++, $youbi++) {
         $week .= '<td class="today">' . $day;
     }else if(diary_icon(date("Y-m-d",strtotime($date)),$diary_array,$target_id)){
         $week .= '<td>' . $day . $diary;
+    }else if(hospital_icon(date("Y-m-d",strtotime($date)),$hospital_array,$target_id)){
+        $week .= '<td>' . $day . $hospital;
+    }else if(diary_icon(date("Y-m-d", strtotime($date)), $diary_array, $target_id) && hospital_icon(date("Y-m-d", strtotime($date)), $hospital_array, $target_id)) {
+        $week .= '<td>' . $day . $diary . $hospital;
     } else {
         $week .= '<td>' . $day;
     }
@@ -144,9 +183,9 @@ for ( $day = 1; $day <= $day_count; $day++, $youbi++) {
             </div>
             <div class="box">
                 <h3>
-                    <a href="?ym=<?=$prev?>"><i class="fa-solid fa-circle-chevron-left"></i></a> 
+                    <a href="?ym=<?=$prev?>&id=<?=$target_id?>"><i class="fa-solid fa-circle-chevron-left"></i></a> 
                     <?=$html_title?> 
-                    <a href="?ym=<?=$next?>"><i class="fa-solid fa-circle-chevron-right"></i></a>
+                    <a href="?ym=<?=$next?>&id=<?=$target_id?>"><i class="fa-solid fa-circle-chevron-right"></i></a>
                 </h3>
                 <table class="calendar">
                     <tr>
