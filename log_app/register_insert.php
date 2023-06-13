@@ -1,17 +1,15 @@
 <?php
 session_start();
-if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
-    echo "LOGIN Error!";
-    exit();
-}
+include("funcs.php");
+sschk();
+
 
 //入力チェック（受信確認処理追加）
 if(
     !isset($_POST["name"]) || $_POST["name"]=="" ||
     !isset($_POST["gender"]) || $_POST["gender"]=="" ||
     !isset($_POST["birth"]) || $_POST["birth"]=="" ||
-    !isset($_POST["type"]) ||
-    !isset($_FILES["photo"]["name"])
+    !isset($_POST["type"]) 
 ){
     exit('ParamError');
 }
@@ -21,24 +19,25 @@ $name=$_POST["name"];
 $gender=$_POST["gender"];
 $birth=$_POST["birth"];
 $type=$_POST["type"];
-$photo=$_FILES["photo"]["name"];
+$user_id=$_SESSION["id"];
 
-//1-2. FileUPLOAD
-$upload="img/";
-if(move_uploaded_file($_FILES['photo']['tmp_name'],$upload.$photo)){
-
-}else{
-    echo "uapload failed";
-    echo $_FILES['photo']['error'];
-}
-
-//2.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
-include("funcs.php");
+//2.DBに接続する（エラー処理追加）
 $pdo = db_conn();
 
+//1-2. FileUPLOAD
+$status = fileUpload("photo","img/");
+if($status==1){
+  exit("UploadError1");
+}else if($status==2){
+  exit("UploadError2");
+}else{
+  //Good
+  $photo = $status;  //ファイル名
+}
+
 //3.データ登録SQL作成
-$sql = "INSERT INTO target_table(id, name, gender, birth, type, photo, indate )
-VALUES(NULL, :name, :gender, :birth, :type, :photo, sysdate())";
+$sql = "INSERT INTO target_table(id, name, gender, birth, type, photo, user_id, indate )
+VALUES(NULL, :name, :gender, :birth, :type, :photo, :user_id, sysdate())";
 
 $stmt=$pdo->prepare($sql);
 
@@ -47,6 +46,7 @@ $stmt->bindValue(':gender',$gender,PDO::PARAM_STR);
 $stmt->bindValue(':birth',$birth,PDO::PARAM_STR);
 $stmt->bindValue(':type',$type,PDO::PARAM_STR);
 $stmt->bindValue(':photo',$photo,PDO::PARAM_STR);
+$stmt->bindValue(':user_id',$user_id,PDO::PARAM_INT);
 $status=$stmt->execute();
 
 //4.データ等力処理後 *書き換えることほぼない。そのまま使っていいよ。
@@ -56,7 +56,10 @@ if($status==false){
     exit("QueryError:".$error[2]);
 }else{
     //5.index.phpへリダイレクト
-    header("Location: select.php");
+    $last_insert_id = $pdo->lastInsertId();
+    $redirect_url = "top.php?id=" . urlencode($last_insert_id);
+
+    header("Location: " . $redirect_url);
     exit;
 }
 

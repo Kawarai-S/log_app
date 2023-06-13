@@ -30,11 +30,19 @@ $stmt->bindValue(':lid',$lid,PDO::PARAM_STR);
 $stmt->bindValue(':lpw',$lpw,PDO::PARAM_STR);
 $status=$stmt->execute();
 
+$id = $pdo->lastInsertId();
+
 //4.データ等力処理後 *書き換えることほぼない。そのまま使っていいよ。
 if($status==false){
     //SQL実行時にエラーがある場合
     sql_error($stmt);
 }else{
+
+    session_start();
+    $_SESSION["chk_ssid"]  = session_id(); 
+    $_SESSION["name"]      = $name;
+    $_SESSION["id"] = $id;
+
     //5.index.phpへリダイレクト
     redirect('register.php');
 }

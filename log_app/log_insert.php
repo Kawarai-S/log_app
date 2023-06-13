@@ -1,9 +1,8 @@
 <?php
 session_start();
-if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
-    echo "LOGIN Error!";
-    exit();
-}
+include("funcs.php");
+sschk();
+
 //入力確認
 if (
     !isset($_POST["date"]) || $_POST["date"] == "" ||
@@ -25,8 +24,7 @@ $target_id=$_POST["target_id"];
 
 // var_dump($target_id);
 
-//2.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
-include("funcs.php");
+//2.DBに接続する（エラー処理追加）
 $pdo = db_conn();
 
 //3.データ登録SQL作成  

@@ -1,15 +1,13 @@
 <?php
 session_start();
-if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
-    echo "LOGIN Error!";
-    exit();
-}
+include("funcs.php");
+sschk();
+
 //0.GETでid値を取得
 $item_id = $_GET["id"];
 $target_id=$_GET["target_id"];
 
-//1.DBに接続する（エラー処理追加）*DB接続時はこれをまるっとセットで書けばOK!必要なとこだけ変更してね。
-include("funcs.php");
+//1.DBに接続する（エラー処理追加）
 $pdo = db_conn();
 
 //2.データ取得SQL
@@ -60,6 +58,7 @@ if ($row['type'] === 'number') {
 <body>
     <div class="wrap">
         <div class="Form">
+            <p class="title"><?=$row["item"]?>の記録</p>
             <form method="POST" action="log_insert.php" >
                 <div class="Form-Item">
                     <p class="Form-Item-Label">日時</p>

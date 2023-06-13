@@ -1,14 +1,12 @@
 <?php
 session_start();
-if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
-    echo "LOGIN Error!";
-    exit();
-}
+include("funcs.php");
+sschk();
+
 //1. POSTデータ取得
 $log_id = $_POST["log_id"];
 
 //2. DB接続します
-include("funcs.php");
 $pdo = db_conn();
 
 //３．削除処理

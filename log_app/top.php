@@ -6,7 +6,7 @@ if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
 }
 
 //0.GETでid値を取得
-// $target_id = $_GET["id"];
+$target_id = $_GET["id"];
 $user_id=$_SESSION["id"];
 
 //1.DBに接続する（エラー処理追加）
@@ -14,9 +14,9 @@ include("funcs.php");
 $pdo = db_conn();
 
 //2.データ取得SQL（target）
-$sql = "SELECT*FROM target_table WHERE user_id=:user_id ORDER BY id ASC LIMIT 1";
+$sql = "SELECT*FROM target_table WHERE id=:target_id";
 $stmt = $pdo->prepare($sql);
-$stmt->bindValue(':user_id',$user_id,PDO::PARAM_INT);
+$stmt->bindValue(':target_id',$target_id,PDO::PARAM_INT);
 $status = $stmt->execute();
 
 //3.データ表示(target)
@@ -27,7 +27,7 @@ if($status==false){
 }else{
     $row=$stmt->fetch();
 }
-$target_id=$row["id"];
+
 
 // ユーザーが所有する全てのペットを取得するSQL
 $sql = "SELECT * FROM target_table WHERE user_id = :user_id";
@@ -35,23 +35,29 @@ $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 $status = $stmt->execute();
 
-$list="";
-if($status == false){
+$list = "";
+if ($status == false) {
     // SQL実行時にエラーがある場合
-    $erro = $stmt->errorINfo();
-    exit("QueryError:".$error[2]);
-}else{
+    $error = $stmt->errorInfo();
+    exit("QueryError: " . $error[2]);
+} else {
     // ペットのリストを表示する
-    while($pet_row = $stmt->fetch()){
-        $tabId=$pet_row["id"]; //targetのidをタブの識別子とする
-        $list .= '<li class="tab"  data-tab="' . $tabId . '">'.$pet_row["name"].'</li>';
-        
-        //
-        if(empty($activeTabId)){
-            $activeTabId = $tabId;
+    while ($pet_row = $stmt->fetch()) {
+        $tabId = $pet_row["id"]; // targetのidをタブの識別子とする
+
+        // ページを読み込んだ時に取得した$target_idと$tabIDが一致したら背景の色を変える
+        if ($target_id == $tabId) {
+            $list .= '<li class="tab"  data-tab="' . $tabId . '" style="background-color:#b9e9f2;">';
+            $list .= '<a href="top.php?id=' . $tabId . '">' . $pet_row["name"] . '</a>';
+            $list .= '</li>';
+        } else {
+            $list .= '<li class="tab"  data-tab="' . $tabId . '">';
+            $list .= '<a href="top.php?id=' . $tabId . '">' . $pet_row["name"] . '</a>';
+            $list .= '</li>';
         }
     }
 }
+
 
 
 // データ取得SQL(item&log)
@@ -139,7 +145,7 @@ $ageInDays = $diff->days;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>記録一覧</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="css/reset.css">
@@ -197,11 +203,12 @@ $ageInDays = $diff->days;
             </div>
                 <?=$view?>
             </div>
-            <div class="menu">
+                <?php include("menu.php"); ?>
+            <!-- <div class="menu">
                 <ul>
-                    <li><a href="select.php"><i class="fa-solid fa-paw"></i><span>Pets</span></a></li>
+                    <li><a href="calendar.php"><i class="fa-solid fa-calendar-days"></i><span>Calendar</span></a></li>
                     <li><a href="chart_view.php"><i class="fa-solid fa-book"></i><span>Diary</span></a></li>
-                    <li><a href="#"><i class="fa-solid fa-stethoscope"></i><span>Hospital</span></a></li>
+                    <li><a href="hospital_serch.php?id=<?=h($target_id)?>"><i class="fa-solid fa-stethoscope"></i><span>Hospital</span></a></li>
                     <li><a href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     <li>
                         <form method="post" action="logout.php">
@@ -211,11 +218,11 @@ $ageInDays = $diff->days;
                         </form>
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
+    <!-- <script>
         $(document).ready(function(){
             $(".tab").on("click",function(){
                 let tabId = $(this).data('data-tab');
@@ -228,6 +235,6 @@ $ageInDays = $diff->days;
             // 最初のタブに active クラスを追加
             $('.tab:first').addClass('active');
         })
-    </script>
+    </script> -->
 </body>
 </html>

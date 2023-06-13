@@ -1,9 +1,7 @@
 <?php
 session_start();
-if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
-    echo "LOGIN Error!";
-    exit();
-}
+include("funcs.php");
+sschk();
 
 //入力確認
 if (
@@ -27,7 +25,6 @@ $memo=$_POST["memo"];
 $item_id=$_POST["item_id"];
 
 // //2.DB接続
-include("funcs.php");
 $pdo = db_conn();
 
 // //3.UPDATEで更新

@@ -1,10 +1,7 @@
 <?php
 session_start();
-if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
-    echo "LOGIN Error!";
-    exit();
-}
-
+include("funcs.php");
+sschk();
 $item_id=$_POST["item_id"];
 
 //最初の読み込み時に当月を割り当て
@@ -15,7 +12,6 @@ if(isset($_POST["month-select"]) && $_POST["month-select"]!=""){
 }
 
 //データベース接続
-include("funcs.php");
 $pdo = db_conn();
 
 //データ取得

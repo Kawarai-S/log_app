@@ -1,15 +1,12 @@
 <?php
 session_start();
-if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
-    echo "LOGIN Error!";
-    exit();
-}
+include("funcs.php");
+sschk();
 
 //1.GETでid値を取得
 $id = $_GET["id"];
 
 //2.DB接続など
-include("funcs.php");
 $pdo = db_conn();
 
 //3.SELECT*FROM
@@ -63,6 +60,7 @@ if ($row['type'] === 'number') {
 <body>
     <div class="wrap">
         <div class="Form">
+            <p class="title">記録の編集</p>
             <form method="POST" action="log_update.php" >
                 <div class="Form-Item">
                     <p class="Form-Item-Label">日時</p>

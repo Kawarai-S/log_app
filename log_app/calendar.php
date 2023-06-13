@@ -1,4 +1,41 @@
 <?php
+session_start();
+include("funcs.php");
+sschk();
+
+$target_id=$_GET["id"];
+
+//************日記の有無の確認と日付を取り出す関数*************/
+function getArticlesDates($target_id) {
+    $pdo = db_conn();
+
+    $ps = $pdo->prepare("SELECT date FROM diary_table WHERE target_id = :target_id GROUP BY date");
+    $ps->execute([':target_id' => $target_id]);;
+
+    $article_dates = array();
+
+    foreach($ps as $out) {
+        $date_out = strtotime((string) $out['date']);
+        $article_dates[date('Y-m-d', $date_out)] = true;
+    }
+
+    ksort($article_dates);
+    return $article_dates;
+}
+
+//************記事のある日にアイコンを表示させる関数*************/
+$diary_array = getArticlesDates($target_id);
+function diary_icon($date, $diary_array, $target_id) {
+    $icon="";    
+    if (array_key_exists($date, $diary_array)) {       
+        $icon .= '</br><a href="diary_view.php?date='.$date.'&id='.$target_id.'">';
+        $icon .= '<i class="fa-solid fa-book"></i>';
+        $icon .= '</a>';
+        }    
+        return $icon;
+}
+
+//************カレンダーの表示*************/
 // タイムゾーンを設定
 date_default_timezone_set('Asia/Tokyo');
 
@@ -52,12 +89,18 @@ $week .= str_repeat('<td></td>', $youbi);
 
 for ( $day = 1; $day <= $day_count; $day++, $youbi++) {
 
-    // 2021-06-3
+    // 
     $date = $ym . '-' . $day;
+
+    //予約日設定
+    $diary = diary_icon(date("Y-m-d",strtotime($date)),$diary_array,$target_id);
+
 
     if ($today == $date) {
         // 今日の日付の場合は、class="today"をつける
         $week .= '<td class="today">' . $day;
+    }else if(diary_icon(date("Y-m-d",strtotime($date)),$diary_array,$target_id)){
+        $week .= '<td>' . $day . $diary;
     } else {
         $week .= '<td>' . $day;
     }
@@ -96,7 +139,15 @@ for ( $day = 1; $day <= $day_count; $day++, $youbi++) {
 <body>
     <div class="wrap">
         <div class="main">
-                <h3><a href="?ym=<?=$prev?>">&lt;</a> <?=$html_title?> <a href="?ym=<?=$next?>">&gt;</a></h3>
+            <div class="title">
+                <h2>カレンダー</h2>
+            </div>
+            <div class="box">
+                <h3>
+                    <a href="?ym=<?=$prev?>"><i class="fa-solid fa-circle-chevron-left"></i></a> 
+                    <?=$html_title?> 
+                    <a href="?ym=<?=$next?>"><i class="fa-solid fa-circle-chevron-right"></i></a>
+                </h3>
                 <table class="calendar">
                     <tr>
                         <th>日</th>
@@ -112,8 +163,16 @@ for ( $day = 1; $day <= $day_count; $day++, $youbi++) {
                             echo $week;
                         }
                     ?>
-                </table> 
+                </table>
+            </div> 
+            <div class="box add">
+                <a href="diary.php?id=<?=$target_id?>"><p><i class="fa-solid fa-pen-to-square"></i> 日記をつける</p></a>
+            </div>
+            <div class="box add">
+                <a href="hospital.php?id=<?=$target_id?>"><p><i class="fa-solid fa-pen-to-square"></i> 通院記録をつける</p></a>
+            </div>
         </div>
+        <?php include("menu.php"); ?>
     </div>
 </body>
 </html>

@@ -44,7 +44,7 @@
             
                 <div class="input-section">
                     <i class="fas fa-user"></i>
-                    <input class="user-input" type="text" name="name" placeholder="Username">
+                    <input class="user-input" type="text" name="name" placeholder="UserName">
                 </div>
                 <div class="input-section">
                     <i class="fa-solid fa-id-card-clip"></i>

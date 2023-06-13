@@ -1,16 +1,13 @@
 <?php
 session_start();
-if(!isset($_SESSION["chk_ssid"]) || $_SESSION["chk_ssid"]!=session_id()){
-    echo "LOGIN Error!";
-    exit();
-}
+include("funcs.php");
+sschk();
 
 //target_idを取得
 $target_id=$_GET["id"];
 
 
 //データベース接続
-include("funcs.php");
 $pdo = db_conn();
 
 //データ取得
@@ -41,6 +38,7 @@ $dbh = null;
 <body>
     <div class="wrap">
         <div class="Form">
+            <p class="title">記録項目追加</p>
             <form method="POST" action="item_insert.php" >
                 <div class="Form-Item">
                     <p class="Form-Item-Label">記録項目</p>

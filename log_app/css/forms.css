@@ -7,7 +7,6 @@ body{
 .wrap{
     width:100%;
     height:100vh;
-    max-width: 640px;
     background-color: #fbe986;
     display: flex;
     justify-content: center;
@@ -24,9 +23,16 @@ form {
     align-items: center;
 }
 
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
 .Form {
-    background-color: #fff;
-    padding: 32px 24px;
+  background-color: #fff;
+  padding: 32px 24px;
 }
 
 input,select {
@@ -36,6 +42,11 @@ input,select {
   line-height: 150%;
   margin-bottom: 16px;
   box-sizing: border-box;
+}
+
+textarea {
+  resize: none;
+  width: 276px;
 }
 
 .Form-Btn {
@@ -55,3 +66,22 @@ input,select {
 .Form-Item {
     width: 100%;
 }
+
+
+
+@media (min-width: 641px) {
+    .wrap {
+      margin: 0 auto;
+      max-width: 640px;
+    }
+  }
+  
+  @media (max-width: 640px){
+    /* 幅640px以下の場合に適用するスタイル */
+    .wrap {
+      margin: 0;
+      max-width: none;
+    }
+  }
+
+  

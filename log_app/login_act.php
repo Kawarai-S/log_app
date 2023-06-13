@@ -30,8 +30,23 @@ if($pw){ //$pw==trueと同じ意味だよ
     $_SESSION["kanri_flg"] = $val['kanri_flg'];
     $_SESSION["name"]      = $val['name'];
     $_SESSION["id"] = $val['id'];
+
+    //最初の一匹のidを取得
+    $target_id = ""; // target_tableから取得するidを格納する変数
+    $sql = "SELECT id FROM target_table WHERE user_id = :user_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':user_id', $_SESSION['id'], PDO::PARAM_INT);
+    $status = $stmt->execute();
+
+    if ($status) {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $target_id = $row['id'];
+        }
+    }
+
     //Login成功時（リダイレクト）
-    redirect("select.php");
+    redirect("top.php?id=$target_id");
   }else{
     //Login失敗時(Logoutを経由：リダイレクト)
     redirect("entrance.php");
