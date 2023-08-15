@@ -11,7 +11,7 @@ $date = $_GET["date"];
 $pdo = db_conn();
 
 //2.データ取得SQL
-$sql = "SELECT * FROM hospital_table WHERE target_id=:target_id ORDER BY DATE(date)=:date";
+$sql = "SELECT * FROM hospital_table WHERE target_id=:target_id AND DATE(date)=:date";
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':target_id',$target_id,PDO::PARAM_INT);
 $stmt->bindValue(':date',$date,PDO::PARAM_STR);
@@ -26,7 +26,7 @@ if($status==false){
 }else{
     while($result=$stmt->fetch(PDO::FETCH_ASSOC)){
         $view .= '<div class="diary">';
-        $view .= '<div class="log_title"">'.$result["title"].'</div>';
+        $view .= '<div class="log_title">'.$result["title"].'</div>';
         $view .= '<div class="log_txt">';
         $view .= '<div>'.$result["category"].' / '.$result["date"].'</div>';
         $view .= '<div>'.$result["memo"].'</div>';

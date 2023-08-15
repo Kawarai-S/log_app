@@ -45,6 +45,7 @@ a {
 /* ダイアリービュー */
 .diary {
   background-color: #fff;
+  margin-top: 36px;
 }
 
 .log_title {

@@ -11,7 +11,7 @@ $date = $_GET["date"];
 $pdo = db_conn();
 
 //2.データ取得SQL
-$sql = "SELECT * FROM diary_table WHERE target_id=:target_id ORDER BY DATE(date)=:date";
+$sql = "SELECT * FROM diary_table WHERE target_id=:target_id AND DATE(date)=:date";
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':target_id',$target_id,PDO::PARAM_INT);
 $stmt->bindValue(':date',$date,PDO::PARAM_STR);
